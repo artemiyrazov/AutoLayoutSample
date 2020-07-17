@@ -21,12 +21,35 @@ class ViewController: UIViewController {
         return view
     }()
     
+    lazy var permanentConstraints: [NSLayoutConstraint] = [
+        squareView.widthAnchor.constraint(equalToConstant: 100),
+        squareView.heightAnchor.constraint(equalToConstant: 100),
+        rectangleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2)
+    ]
+    
+    lazy var lanscapeConstraints: [NSLayoutConstraint] = [
+        squareView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+        squareView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+        rectangleView.leadingAnchor.constraint(equalTo: self.squareView.trailingAnchor, constant: 40),
+        rectangleView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -40),
+        rectangleView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+    ]
+    
+    lazy var portraitConstraints: [NSLayoutConstraint] = [
+        squareView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        squareView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+        rectangleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+        rectangleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100),
+        rectangleView.topAnchor.constraint(equalTo: squareView.bottomAnchor, constant: 40),
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(squareView)
         view.addSubview(rectangleView)
         
+        NSLayoutConstraint.activate(permanentConstraints)
         configureLayout()
     }
     
@@ -41,40 +64,15 @@ class ViewController: UIViewController {
     
     
     func configureLayout() {
-        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
-        view.removeConstraints(view.constraints)
-        squareView.removeConstraints(squareView.constraints)
-        rectangleView.removeConstraints(rectangleView.constraints)
-        addPermanentConstraints()
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }   
         if orientation.isPortrait {
-            addPortraitConstraints()
+            NSLayoutConstraint.deactivate(lanscapeConstraints)
+            NSLayoutConstraint.activate(portraitConstraints)
         } else if orientation.isLandscape {
-            addLanscapeConstraints()
+            NSLayoutConstraint.deactivate(portraitConstraints)
+            NSLayoutConstraint.activate(lanscapeConstraints)
         }
-    }
-    
-    func addPermanentConstraints() {
-        squareView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        squareView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        rectangleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2).isActive = true
-    }
-    
-    func addLanscapeConstraints() {
-        squareView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        squareView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        
-        rectangleView.leadingAnchor.constraint(equalTo: squareView.trailingAnchor, constant: 40).isActive = true
-        rectangleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
-        rectangleView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-    }
-    
-    func addPortraitConstraints() {
-        squareView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        squareView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
-        
-        rectangleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        rectangleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100).isActive = true
-        rectangleView.topAnchor.constraint(equalTo: squareView.bottomAnchor, constant: 40).isActive = true
+        view.layoutIfNeeded()
     }
     
 }
