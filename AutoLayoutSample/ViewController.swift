@@ -45,6 +45,7 @@ class ViewController: UIViewController {
         view.removeConstraints(view.constraints)
         squareView.removeConstraints(squareView.constraints)
         rectangleView.removeConstraints(rectangleView.constraints)
+        addPermanentConstraints()
         if orientation.isPortrait {
             addPortraitConstraints()
         } else if orientation.isLandscape {
@@ -52,27 +53,27 @@ class ViewController: UIViewController {
         }
     }
     
-    func addLanscapeConstraints() {
+    func addPermanentConstraints() {
         squareView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         squareView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        rectangleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2).isActive = true
+    }
+    
+    func addLanscapeConstraints() {
         squareView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         squareView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         
-        rectangleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2).isActive = true
-        rectangleView.leadingAnchor.constraint(equalTo: squareView.trailingAnchor, constant: 20).isActive = true
-        rectangleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20).isActive = true
+        rectangleView.leadingAnchor.constraint(equalTo: squareView.trailingAnchor, constant: 40).isActive = true
+        rectangleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
         rectangleView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
     func addPortraitConstraints() {
-        squareView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        squareView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         squareView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         squareView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
         
         rectangleView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         rectangleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100).isActive = true
-        rectangleView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2).isActive = true
         rectangleView.topAnchor.constraint(equalTo: squareView.bottomAnchor, constant: 40).isActive = true
     }
     
